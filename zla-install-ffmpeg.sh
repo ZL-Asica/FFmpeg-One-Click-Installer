@@ -5,9 +5,9 @@
 #
 # System Required:  CentOS 6/7, Ubuntu, Debian
 #
-# Copyright (C) 2019-2020 ZL Asica <zl@zla.moe>
+# Copyright (C) 2019-2023 ZL Asica <zl@zla.moe>
 #
-# URL: https://www.zla.moe/
+# URL: https://www.zla.pub/
 #
 
 red='\033[0;31m'
@@ -70,7 +70,7 @@ start(){
     echo "----------------------------------------"
     echo "${cyan}ffmpeg已安装完成(Complete!)"
     echo "有任何问题欢迎通过邮箱给我反馈"
-    echo "也欢迎访问我的博客 https://www.zla.moe/"
+    echo "也欢迎访问我的博客 https://www.zla.pub/"
     echo "zl@zla.moe"
 }
 
@@ -78,10 +78,10 @@ echo "---------- 系统信息 ----------"
 echo " OS      : $release"
 echo " Arch    : $arch ($lbit Bit)"
 echo "------------ 脚本信息 ---------------------"
-echo "ZL Asica的ffmpeg一键安装脚本(V1.0)"
+echo "ZL Asica的ffmpeg一键安装脚本(V1.0.1)"
 echo "本脚本用于为centos 6/7，Ubuntu，Debian一键安装ffmpeg"
 echo "By-ZL Asica"
-echo "我的博客: https://www.zla.moe/"
+echo "我的博客: https://www.zla.pub/"
 echo "------------ 操作提示 ---------------------"
 echo "请键入y以继续，n以结束，或你可以直接摁下 Ctrl+C 以退出"
 read -p "y/n:" choice
