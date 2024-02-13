@@ -47,7 +47,9 @@ error_exit() {
 [[ $EUID -ne 0 ]] && error_exit "error_root"
 
 # Select language
-echo "\n\nZL Asica FFmpeg Auto Installer\nhttps://github.com/ZL-Asica/one-key-ffmpeg\n" # Default welcome message
+echo "" # New line for better readability
+echo "ZL Asica FFmpeg Auto Installer"
+echo "https://github.com/ZL-Asica/one-key-ffmpeg\n" # Default welcome message
 echo "Select a language / 选择语言:"
 echo "1) English"
 echo "2) 中文"
@@ -117,22 +119,31 @@ install_dependencies() {
 
 # Compile FFmpeg from source
 compile_ffmpeg() {
-    echo "${messages[${lang}_compiling_ffmpeg]}"
+    echo "${messages[$lang_compiling_ffmpeg]}"
     cd /usr/local/src || exit
     if ! git clone --depth 1 https://git.ffmpeg.org/ffmpeg.git ffmpeg; then
-        echo "${messages[${lang}_installation_failed]}"
+        echo "${messages[$lang_installation_failed]}"
         exit 1
     fi
     cd ffmpeg || exit
-    ./configure --enable-gpl --enable-libx264 --enable-libx265 --enable-libfdk-aac --enable-libvpx --enable-libopus
+    # Check for libfdk_aac and adjust configure command accordingly
+    if ffmpeg -codecs | grep -q libfdk_aac; then
+        ./configure --enable-gpl --enable-libx264 --enable-libx265 --enable-libfdk-aac --enable-libvpx --enable-libopus --enable-nonfree
+    else
+        ./configure --enable-gpl --enable-libx264 --enable-libx265 --enable-libvpx --enable-libopus
+    fi
+    if [ $? -ne 0 ]; then
+        echo "${messages[$lang_installation_failed]}"
+        exit 1
+    fi
     if ! make -j"$(nproc)"; then
-        echo "${messages[${lang}_installation_failed]}"
+        echo "${messages[$lang_installation_failed]}"
         exit 1
     fi
     make install
     hash -r
     # remove source code
-    rm -rf /usr/local/src/ffmpeg
+    cd .. && rm -rf ffmpeg
 }
 
 # Clean up unnecessary files and packages
@@ -166,3 +177,5 @@ main() {
 
     echo -e "${cyan}${messages[${lang}_ffmpeg_installed]}${plain}"
 }
+
+main
