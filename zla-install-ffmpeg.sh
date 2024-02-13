@@ -6,17 +6,26 @@
 # Copyright (C) 2019-2024 ZL Asica
 
 # Define color codes for output
-red='\033[0;31m'
-cyan='\033[1;36m'
-plain='\033[0m'
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+blue=$(tput setaf 4)
+pink=$(tput setaf 5)
+cyan=$(tput setaf 6)
+plain=$(tput sgr0)
 
 # Multi-language messages, enhanced for comprehensiveness
 declare -A messages
 # English messages
 messages[en_error_root]="Error: This script must be run as root!"
 messages[en_error_unsupported]="Error: Unsupported system. This script only supports CentOS, Ubuntu, Debian, and derivatives."
+messages[en_pre_install_already_installed]="FFmpeg is already installed. Installed version: "
+messages[en_pre_install_ask_update]="Do you want to update FFmpeg? (y/n): "
+messages[en_pre_install_not_update]="Keeping the installed version and exiting."
+messages[en_pre_install]="Choose installation method:\n1) Quick install\n2) Compile from source"
+messages[en_pre_install_method]="Select an option (1-2): "
 messages[en_install_dependencies]="Installing necessary dependencies for compiling FFmpeg..."
 messages[en_compiling_ffmpeg]="Compiling FFmpeg from source..."
+messages[en_compiling_ffmpeg_prompt]="We are checking the system and compiling FFmpeg from source. This process may take a while. Please be patient."
 messages[en_cleaning_up]="Cleaning up..."
 messages[en_ffmpeg_installed]="FFmpeg installation complete."
 messages[en_invalid_option]="Error: Invalid option selected."
@@ -26,8 +35,14 @@ messages[en_installation_failed]="Error: FFmpeg installation failed. Please chec
 # Chinese messages
 messages[zh_error_root]="错误: 此脚本必须以root账户运行!"
 messages[zh_error_unsupported]="错误: 不支持的系统。此脚本仅支持 CentOS, Ubuntu, Debian 及其衍生版。"
+messages[zh_pre_install_already_installed]="FFmpeg 已安装。已安装版本: "
+messages[zh_pre_install_ask_update]="是否要更新 FFmpeg? (y/n): "
+messages[zh_pre_install_not_update]="保留已安装的版本并退出。"
+messages[zh_pre_install]="选择安装方式:\n1) 快速安装\n2) 从源代码编译"
+messages[zh_pre_install_method]="选择一个选项 (1-2): "
 messages[zh_install_dependencies]="正在安装编译 FFmpeg 所需的依赖..."
 messages[zh_compiling_ffmpeg]="正在从源代码编译 FFmpeg..."
+messages[zh_compiling_ffmpeg_prompt]="我们正在检查系统并从源代码编译 FFmpeg。此过程可能需要一些时间，请耐心等待。"
 messages[zh_cleaning_up]="正在清理..."
 messages[zh_ffmpeg_installed]="FFmpeg 安装完成。"
 messages[zh_invalid_option]="错误: 选择了无效的选项。"
@@ -43,13 +58,25 @@ error_exit() {
     exit 1
 }
 
+# Move focus to the top of the terminal without clearing the screen
+printf '\033c'
+
 # Ensure the script is run as root
 [[ $EUID -ne 0 ]] && error_exit "error_root"
 
 # Select language
 echo "" # New line for better readability
-echo "ZL Asica FFmpeg Auto Installer"
-echo "https://github.com/ZL-Asica/one-key-ffmpeg\n" # Default welcome message
+echo -e "${pink}"
+cat << "EOF"
+ ______          _        _           
+|__  / |        / \   ___(_) ___ __ _ 
+  / /| |       / _ \ / __| |/ __/ _` |
+ / /_| |___   / ___ \\__ \ | (_| (_| |
+/____|_____| /_/   \_\___/_|\___\__,_|                                     
+
+EOF
+echo -e "${pink}ZL Asica FFmpeg Auto Installer for Linux${plain}"
+echo -e "${pink}https://github.com/ZL-Asica/one-key-ffmpeg${plain}" # Default welcome message
 echo "Select a language / 选择语言:"
 echo "1) English"
 echo "2) 中文"
@@ -105,7 +132,7 @@ install_dependencies() {
     case "$release" in
         centos|rhel|fedora)
             yum groupinstall "Development Tools" -y
-            yum install nasm yasm libx264-devel libx265-devel libfdk-aac-devel libvpx-devel libopus-devel -y
+            yum install nasm yasm libx264-devel libx265-devel libfdk-aac-devel libvpx-devel opus-devel -y
             ;;
         debian|ubuntu|raspbian)
             apt update
@@ -119,25 +146,27 @@ install_dependencies() {
 
 # Compile FFmpeg from source
 compile_ffmpeg() {
-    echo "${messages[$lang_compiling_ffmpeg]}"
+    echo "${messages[${lang}_compiling_ffmpeg]}"
     cd /usr/local/src || exit
+    rm -rf ffmpeg # Remove any existing source code
     if ! git clone --depth 1 https://git.ffmpeg.org/ffmpeg.git ffmpeg; then
-        echo "${messages[$lang_installation_failed]}"
+        echo -e "${red}${messages[${lang}_installation_failed]}"
         exit 1
     fi
     cd ffmpeg || exit
     # Check for libfdk_aac and adjust configure command accordingly
+    echo "${messages[${lang}_compiling_ffmpeg_prompt]}"
     if ffmpeg -codecs | grep -q libfdk_aac; then
         ./configure --enable-gpl --enable-libx264 --enable-libx265 --enable-libfdk-aac --enable-libvpx --enable-libopus --enable-nonfree
     else
         ./configure --enable-gpl --enable-libx264 --enable-libx265 --enable-libvpx --enable-libopus
     fi
     if [ $? -ne 0 ]; then
-        echo "${messages[$lang_installation_failed]}"
+        echo -e "${red}${messages[${lang}_installation_failed]}"
         exit 1
     fi
     if ! make -j"$(nproc)"; then
-        echo "${messages[$lang_installation_failed]}"
+        echo -e "${red}${messages[${lang}_installation_failed]}"
         exit 1
     fi
     make install
@@ -163,18 +192,55 @@ clean_up() {
     esac
 }
 
+# Check if FFmpeg is already installed and its version
+remove_existing_ffmpeg() {
+    echo "Detecting existing FFmpeg installation..."
+    if command -v ffmpeg &>/dev/null; then
+        local installed_version=$(ffmpeg -version | head -n1 | grep -oP '(?<=ffmpeg version )[^ ]+')
+        echo -e "${green}Found FFmpeg version: ${installed_version}${plain}"
+        read -p "${messages[${lang}_pre_install_ask_update]}" update_choice
+        if [[ $update_choice =~ ^[Yy]$ ]]; then
+            echo "Removing existing FFmpeg version..."
+            # Try to remove FFmpeg using package manager first
+            if command -v apt &>/dev/null; then
+                sudo apt-get remove ffmpeg -y
+            elif command -v yum &>/dev/null; then
+                sudo yum remove ffmpeg ffmpeg-devel -y
+            fi
+            # Remove any remaining files if the package manager didn't remove them
+            if [ -f /usr/local/bin/ffmpeg ]; then
+                sudo rm /usr/local/bin/ffmpeg
+            fi
+            if [ -f /usr/bin/ffmpeg ]; then
+                sudo rm /usr/bin/ffmpeg
+            fi
+            echo "Existing FFmpeg removed."
+        else
+            echo -e "${blue}${messages[${lang}_pre_install_not_update]}${plain}"
+            exit 0
+        fi
+    fi
+}
+
 # Main installation process
 main() {
     detect_system
-    echo "${messages[${lang}_detected_system]} $ID $VERSION_ID ($arch)"
-    echo -e "Choose installation method / 选择安装方式:\n1) Quick install / 快速安装\n2) Compile from source / 从源代码编译"
-    read -p "Select an option / 选择一个选项 (1-2): " method
+    echo -e "\n${messages[${lang}_detected_system]} $ID $VERSION_ID ($arch)\n"
+    remove_existing_ffmpeg  # Remove existing FFmpeg before compiling a new version
+    echo -e "${green}${messages[${lang}_pre_install]}${plain}"
+    read -p "${messages[${lang}_pre_install_method]}" method
     case $method in
-        1) install_ffmpeg_package;;
-        2) install_dependencies && compile_ffmpeg && clean_up;;
-        *) error_exit "error_invalid_option";;
+        1)
+            install_ffmpeg_package
+            ;;
+        2)
+            install_dependencies && compile_ffmpeg && clean_up
+            ;;
+        *)
+            echo -e "${red}${messages[${lang}_invalid_option]}${plain}"
+            exit 1
+            ;;
     esac
-
     echo -e "${cyan}${messages[${lang}_ffmpeg_installed]}${plain}"
 }
 
