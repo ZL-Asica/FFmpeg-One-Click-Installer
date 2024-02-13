@@ -1,10 +1,33 @@
-# Linux一键安装ffmpeg脚本
+# ZL Asica's one-key FFmpeg Auto Installer Script
 
-> 本脚本适用于centos6/7，Debian，Ubuntu
+[中文README请点击这里](https://github.com/ZL-Asica/one-key-ffmpeg/blob/master/README_CN.md)
 
-极速安装脚本，非编译安装，编译安装脚本还在编写中。
-使用方式
-请在root用户下运行
-``` bash
-wget https://github.com/ZL-Asica/one-key-ffmpeg/raw/master/zla-install-ffmpeg.sh && chmod +x zla-install-ffmpeg.sh && ./zla-install-ffmpeg.sh
+This script provides an automated way to install FFmpeg on various Linux distributions and architectures.
+
+## Features
+
+- Supports multiple Linux distributions
+- Automatic system detection and architecture check
+- Offers both quick and source compilation installation methods
+- Multi-language support (English and Chinese)
+
+## Requirements
+
+- Root access to the system
+- Internet connection
+
+## Installation
+
+To install FFmpeg using this script, you can use the following one-liner command. This command downloads the script and executes it, offering you an interactive installation process:
+
+```bash
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ZL-Asica/one-key-ffmpeg/master/zla-install-ffmpeg.sh)"
 ```
+
+## Usage
+
+After installation, you can simply run `ffmpeg` to access its features. If you encounter any issues, please report them on the [GitHub issues page](https://github.com/ZL-Asica/one-key-ffmpeg/issues).
+
+## FFmpeg Tutorial
+
+[Tutorial on my blog - in Chinese](https://www.zla.pub/ffmpeg)
