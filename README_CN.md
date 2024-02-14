@@ -1,4 +1,4 @@
-# ZL Asica的一键FFmpeg 自动安装脚本
+# FFmpeg One Click Installer （FFmpeg一键安装）- Linux
 
 此脚本能够一键在各种 Linux 发行版/架构上安装 FFmpeg。
 
@@ -30,6 +30,8 @@ sudo bash -c "$(curl -fsSL https://cdn.jsdelivr.net/gh/ZL-Asica/one-key-ffmpeg@m
 ## 使用
 
 安装完成后，可以直接运行 `ffmpeg` 来访问其功能。如果遇到任何问题，请在 [GitHub 问题页面](https://github.com/ZL-Asica/one-key-ffmpeg/issues)报告。
+
+![CN-zla-ffmpeg](https://s2.loli.net/2024/02/14/HPlkfCXb1AZOJTS.png)
 
 ## FFmpeg使用教程
 

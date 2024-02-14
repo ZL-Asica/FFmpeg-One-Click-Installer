@@ -1,4 +1,4 @@
-# ZL Asica's one-key FFmpeg Auto Installer Script
+# FFmpeg One Click Installer （FFmpeg一键安装）- Linux
 
 [中文README请点击这里](https://github.com/ZL-Asica/one-key-ffmpeg/blob/master/README_CN.md)
 
@@ -32,6 +32,9 @@ sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ZL-Asica/one-key-ff
 ## Usage
 
 After installation, you can simply run `ffmpeg` to access its features. If you encounter any issues, please report them on the [GitHub issues page](https://github.com/ZL-Asica/one-key-ffmpeg/issues).
+
+![EN-zla-ffmpeg](https://s2.loli.net/2024/02/14/Jn3Vo5DHFi4UaTe.png)
+![JP-zla-ffmpeg](https://s2.loli.net/2024/02/14/jaUxPhmT4trIkB2.png)
 
 ## FFmpeg Tutorial
 
