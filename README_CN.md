@@ -24,12 +24,12 @@
 使用以下一行命令安装 FFmpeg，该命令会下载脚本并执行，提供交互式安装过程：
 
 ```bash
-sudo bash -c "$(curl -fsSL https://cdn.jsdelivr.net/gh/ZL-Asica/one-key-ffmpeg@master/zla-install-ffmpeg.sh)"
+sudo bash -c "$(curl -fsSL https://cdn.jsdelivr.net/gh/ZL-Asica/FFmpeg-One-Click-Installer@main/zla-install-ffmpeg.sh)"
 ```
 
 ## 使用
 
-安装完成后，可以直接运行 `ffmpeg` 来访问其功能。如果遇到任何问题，请在 [GitHub 问题页面](https://github.com/ZL-Asica/one-key-ffmpeg/issues)报告。
+安装完成后，可以直接运行 `ffmpeg` 来访问其功能。如果遇到任何问题，请在 [GitHub 问题页面](https://github.com/ZL-Asica/FFmpeg-One-Click-Installer/issues)报告。
 
 ![CN-zla-ffmpeg](https://s2.loli.net/2024/02/14/HPlkfCXb1AZOJTS.png)
 

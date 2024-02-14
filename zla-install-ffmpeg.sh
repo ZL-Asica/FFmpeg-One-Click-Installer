@@ -262,8 +262,8 @@ cat << "EOF"
 /____|_____| /_/   \_\___/_|\___\__,_|                                     
 
 EOF
-echo -e "${pink}ZL Asica FFmpeg Auto Installer for Linux${plain}"
-echo -e "${pink}https://github.com/ZL-Asica/one-key-ffmpeg${plain}\n" # Default welcome message
+echo -e "${pink}FFmpeg One Click Installer （FFmpeg一键安装）- Linux${plain}"
+echo -e "${pink}https://github.com/ZL-Asica/FFmpeg-One-Click-Installer${plain}\n" # Default welcome message
 
 echo -e "${green}Select a language / 选择语言 / 言語を選択${plain}"
 echo -e "${green}\t1) English${plain}"

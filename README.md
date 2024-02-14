@@ -1,6 +1,6 @@
 # FFmpeg One Click Installer （FFmpeg一键安装）- Linux
 
-[中文README请点击这里](https://github.com/ZL-Asica/one-key-ffmpeg/blob/master/README_CN.md)
+[中文README请点击这里](https://github.com/ZL-Asica/FFmpeg-One-Click-Installer/blob/main/README_CN.md)
 
 This script provides an automated way to install FFmpeg on various Linux distributions and architectures.
 
@@ -26,12 +26,12 @@ This script provides an automated way to install FFmpeg on various Linux distrib
 To install FFmpeg using this script, you can use the following one-liner command. This command downloads the script and executes it, offering you an interactive installation process:
 
 ```bash
-sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ZL-Asica/one-key-ffmpeg/master/zla-install-ffmpeg.sh)"
+sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/ZL-Asica/FFmpeg-One-Click-Installer/main/zla-install-ffmpeg.sh)"
 ```
 
 ## Usage
 
-After installation, you can simply run `ffmpeg` to access its features. If you encounter any issues, please report them on the [GitHub issues page](https://github.com/ZL-Asica/one-key-ffmpeg/issues).
+After installation, you can simply run `ffmpeg` to access its features. If you encounter any issues, please report them on the [GitHub issues page](https://github.com/ZL-Asica/FFmpeg-One-Click-Installer/issues).
 
 ![EN-zla-ffmpeg](https://s2.loli.net/2024/02/14/Jn3Vo5DHFi4UaTe.png)
 ![JP-zla-ffmpeg](https://s2.loli.net/2024/02/14/jaUxPhmT4trIkB2.png)
