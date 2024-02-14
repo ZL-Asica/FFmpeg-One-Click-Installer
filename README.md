@@ -4,17 +4,22 @@
 
 This script provides an automated way to install FFmpeg on various Linux distributions and architectures.
 
+## Notice(CentOS)
+
+- Temporarily not support compile installation for CentOS/RHEL/Fedora due to dependencies issues. However, "Quick install" still usable.
+- For Debian/Ubuntu/Raspbian/etc., recommend to use compile installation instead of "Quick install".
+
 ## Features
 
-- Supports multiple Linux distributions
-- Automatic system detection and architecture check
-- Offers both quick and source compilation installation methods
-- Multi-language support (English and Chinese)
+- Supports multiple Linux distributions and architectures.
+- Offers both quick and source compilation installation methods.
+- Multi-language support (English and Chinese).
+- Auto cleanup before and after installation.
 
 ## Requirements
 
-- Root access to the system
-- Internet connection
+- Root access to the system `sudo`
+- Internet connection to `github`
 
 ## Installation
 
